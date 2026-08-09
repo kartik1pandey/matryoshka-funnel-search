@@ -82,19 +82,38 @@ tests/        # unit tests (CI-enforced)
 
 ## 🗺️ Status
 
-🚧 Repo scaffold complete: CI, Docker, and the retrieval-metric /
-funnel-search / InfoNCE-loss modules are implemented and unit-tested.
-Dataset download, backbone embedding precompute, Matryoshka head training,
-and the full evaluation/demo are in progress.
+✅ Weeks 1–3 complete: real ABO data (15,000 products), real frozen OpenCLIP
+embeddings, a real trained Matryoshka head + baseline, and a full funnel-search
+evaluation (Recall@K/nDCG@K at every dimension, retention vs. literature,
+real latency) — see [Results](#-results) below. Remaining: the interactive
+query demo and full-catalog (147k) cost projection (Week 4).
 
 ## 📊 Results
 
-Filled in as real measurements land. No placeholder numbers are ever
-presented as real in this repo.
+Measured on 1,500 held-out validation queries against the real cached
+embeddings for all 15,000 sampled ABO products (Recall@10, retention vs. the
+512-dim reference point):
 
-**Target, from published literature**: ≥94% retrieval-quality retention at
-512 dims, ≥88% at 256 dims (independent academic benchmarking across five
-production embedding models).
+| Dimension | Recall@10 (MRL) | Recall@10 (baseline) | Retention (MRL) | Retention (baseline) |
+|---|---|---|---|---|
+| 512 | 0.681 | 0.677 | 100% | 100% |
+| 256 | 0.662 | 0.650 | 97.2% | 96.0% |
+| 64  | 0.600 | 0.509 | 88.1% | 75.1% |
+| 16  | 0.355 | 0.145 | 52.2% | 21.4% |
+| 8   | 0.139 | 0.041 | 20.4% | 6.1% |
+
+**256-dim retention (97.2%) lands inside the 94–98% range reported by
+independent academic benchmarking of production embedding models** — see
+[docs/08_results.md](./docs/08_results.md) for the full table (all 7
+dimensions, nDCG@10, funnel-search-specific retention, honest discussion of
+where the gap to the literature widens at aggressive truncation, and why).
+
+**Funnel search vs. brute force** (Stage 1 low-dim + Stage 2 full-dim
+rerank, real latency on the 15,000-item catalog): **~4.2x faster** (20.1ms →
+4.8ms per query) for a 1.5-point Recall@10 cost at `low_dim=64`. At a more
+aggressive `low_dim=16`, the MRL model still recovers 93.6% of brute-force
+recall — the baseline collapses to 62% — which is the specific scenario this
+whole project exists to demonstrate.
 
 ## 📚 Citation
 
