@@ -83,12 +83,12 @@ tests/        # unit tests (CI-enforced)
 
 ## 🗺️ Status
 
-✅ Weeks 1–3 complete, Week 4 in progress: real ABO data (15,000 products),
-real frozen OpenCLIP embeddings, a real trained Matryoshka head + baseline, a
-full funnel-search evaluation (Recall@K/nDCG@K at every dimension, retention
-vs. literature, real latency — see [Results](#-results) below), and a working
-interactive query demo (`make demo`). Remaining: full-catalog (147k) cost
-projection and the final writeup pass.
+✅ Weeks 1–4 core work complete: real ABO data (15,000 products), real frozen
+OpenCLIP embeddings, a real trained Matryoshka head + baseline, a full
+funnel-search evaluation (Recall@K/nDCG@K at every dimension, retention vs.
+literature, real latency), a working interactive query demo (`make demo`),
+and a cost projection to the full 147,702-item ABO catalog — see
+[Results](#-results) below. Remaining: the final writeup pass.
 
 ## 📊 Results
 
@@ -116,6 +116,20 @@ rerank, real latency on the 15,000-item catalog): **~4.2x faster** (20.1ms →
 aggressive `low_dim=16`, the MRL model still recovers 93.6% of brute-force
 recall — the baseline collapses to 62% — which is the specific scenario this
 whole project exists to demonstrate.
+
+**Cost projection to the full 147,702-item ABO catalog** (extrapolated from
+the 15,000-item measurements, not separately measured — see
+[docs/08_results.md](./docs/08_results.md) for the full breakdown and
+stated scaling assumptions): brute-force full-dim search extrapolates to
+~257ms/query vs. ~49ms for funnel search (~5.2x). A plain full-dim
+brute-force search would cross a 100ms interactive-latency budget at
+~57,600 items — below this catalog's size — but Stage 1 as actually built
+here (low-dim, not full-dim) has its own much higher viability threshold,
+~304,700 items, comfortably past 147,702. Storage: one 512-dim float32
+vector/item scales to 302.5MB at full catalog size; Stage 1's low-dim view
+is a free slice of that same vector, so a system storing a **separate**
+low-dim index alongside it would need 1.125x more storage for no quality
+benefit.
 
 ## 📚 Citation
 
