@@ -60,6 +60,7 @@ git clone https://github.com/kartik1pandey/matryoshka-funnel-search.git
 cd matryoshka-funnel-search
 make setup     # editable install (torch + jax + dev extras) + pre-commit hooks
 make check     # lint, typecheck, test — same as CI
+make demo      # interactive query CLI (needs data/checkpoints from the training pipeline)
 ```
 
 This project intentionally runs two ML frameworks side by side (frozen
@@ -82,11 +83,12 @@ tests/        # unit tests (CI-enforced)
 
 ## 🗺️ Status
 
-✅ Weeks 1–3 complete: real ABO data (15,000 products), real frozen OpenCLIP
-embeddings, a real trained Matryoshka head + baseline, and a full funnel-search
-evaluation (Recall@K/nDCG@K at every dimension, retention vs. literature,
-real latency) — see [Results](#-results) below. Remaining: the interactive
-query demo and full-catalog (147k) cost projection (Week 4).
+✅ Weeks 1–3 complete, Week 4 in progress: real ABO data (15,000 products),
+real frozen OpenCLIP embeddings, a real trained Matryoshka head + baseline, a
+full funnel-search evaluation (Recall@K/nDCG@K at every dimension, retention
+vs. literature, real latency — see [Results](#-results) below), and a working
+interactive query demo (`make demo`). Remaining: full-catalog (147k) cost
+projection and the final writeup pass.
 
 ## 📊 Results
 

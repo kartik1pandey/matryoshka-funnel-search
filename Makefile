@@ -1,4 +1,4 @@
-.PHONY: setup lint format typecheck test check precommit docker-build docker-run
+.PHONY: setup lint format typecheck test check precommit docker-build docker-run demo
 
 setup:
 	pip install -e ".[torch,jax,dev]"
@@ -21,6 +21,9 @@ check: lint typecheck test
 
 precommit:
 	pre-commit run --all-files
+
+demo:
+	python -m matryoshka_search.demo.cli
 
 docker-build:
 	docker build -t matryoshka-search:latest .
