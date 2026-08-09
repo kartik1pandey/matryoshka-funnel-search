@@ -29,13 +29,13 @@ jobs:
           pip install --extra-index-url https://download.pytorch.org/whl/cpu -e ".[torch,jax,dev]"
 
       - name: Ruff (lint)
-        run: ruff check src tests
+        run: ruff check src tests scripts
 
       - name: Black (format check)
-        run: black --check src tests
+        run: black --check src tests scripts
 
       - name: Mypy (type check)
-        run: mypy src
+        run: mypy src scripts
 
       - name: Pytest (unit tests, no GPU / no dataset download)
         run: pytest -m "not gpu and not slow" --cov=matryoshka_search --cov-report=xml

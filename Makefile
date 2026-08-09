@@ -5,14 +5,14 @@ setup:
 	pre-commit install
 
 lint:
-	ruff check src tests
+	ruff check src tests scripts
 
 format:
-	black src tests
-	ruff check --fix src tests
+	black src tests scripts
+	ruff check --fix src tests scripts
 
 typecheck:
-	mypy src
+	mypy src scripts
 
 test:
 	pytest --cov=matryoshka_search --cov-report=term-missing

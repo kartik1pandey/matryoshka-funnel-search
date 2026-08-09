@@ -14,6 +14,11 @@ from collections.abc import Sequence
 import jax.numpy as jnp
 from jax import Array
 
+# Canonical nested truncation lengths, per docs/02_architecture.md and
+# docs/04_methodology.md. Exported so training/eval code has one shared
+# source of truth instead of each caller retyping the same tuple.
+MATRYOSHKA_DIMS: tuple[int, ...] = (8, 16, 32, 64, 128, 256, 512)
+
 
 def info_nce_loss(image_emb: Array, text_emb: Array, temperature: float = 0.07) -> Array:
     """Symmetric CLIP-style contrastive loss over a batch of matched pairs.
