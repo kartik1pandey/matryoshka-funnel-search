@@ -7,7 +7,7 @@
 ### Cross-framework (PyTorch + JAX) reproduction of production-style Matryoshka Representation Learning "funnel search" on Amazon's public product catalog
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](./pyproject.toml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](./pyproject.toml)
 [![PyTorch](https://img.shields.io/badge/PyTorch-frozen%20backbone-EE4C2C)](https://pytorch.org/)
 [![JAX](https://img.shields.io/badge/JAX-trainable%20head-4285F4)](https://jax.readthedocs.io/)
 [![Paper](https://img.shields.io/badge/arXiv-2205.13147-b31b1b)](https://arxiv.org/abs/2205.13147)

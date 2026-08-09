@@ -8,7 +8,11 @@ version = "0.1.0"
 description = "Cross-framework (PyTorch + JAX) reproduction of Matryoshka Representation Learning funnel search on Amazon Berkeley Objects"
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.10"
+# flax>=0.11 (needed for nnx.Optimizer.update(model, grads) — see the `jax`
+# extra below) requires Python >=3.11; flax 0.10.x (the last 3.10-compatible
+# release) only supports the older update(grads)-only signature, a genuine
+# breaking API change, not a version we can straddle.
+requires-python = ">=3.11"
 authors = [{ name = "Kartik Pandey" }]
 
 dependencies = [
@@ -31,7 +35,12 @@ torch = [
 # Trainable Matryoshka head (JAX + Flax NNX + Optax).
 jax = [
     "jax>=0.4.28",
-    "flax>=0.8.4",
+    # >=0.11 for nnx.Optimizer.update(model, grads) — confirmed via
+    # inspect.signature() that 0.10.7 only accepts update(grads). Also the
+    # version where flax itself starts requiring Python >=3.11 (see
+    # requires-python above) — not a coincidence, it's why the floor here
+    # and the project's Python floor move together.
+    "flax>=0.11.0",
     "optax>=0.2.2",
     # Recent orbax-checkpoint releases (a flax dependency) bundle deeply
     # nested test-fixture paths that exceed Windows' MAX_PATH during pip
@@ -54,7 +63,7 @@ packages = ["src/matryoshka_search"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "NPY"]
@@ -68,10 +77,10 @@ known-first-party = ["matryoshka_search"]
 
 [tool.black]
 line-length = 100
-target-version = ["py310"]
+target-version = ["py311"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
