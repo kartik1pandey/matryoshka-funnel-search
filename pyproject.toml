@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "matryoshka-search"
+version = "0.1.0"
+description = "Cross-framework (PyTorch + JAX) reproduction of Matryoshka Representation Learning funnel search on Amazon Berkeley Objects"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Kartik Pandey" }]
+
+dependencies = [
+    "numpy>=1.26",
+    "pillow>=10.0",
+    "pandas>=2.1",
+    "tqdm>=4.66",
+    "scikit-learn>=1.4",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+# Frozen backbone (PyTorch + OpenCLIP). Installed separately from the JAX
+# group deliberately — see docs/03_environment_setup.md for why these two
+# frameworks are kept in isolated install steps.
+torch = [
+    "torch>=2.2",
+    "open_clip_torch>=2.24",
+]
+# Trainable Matryoshka head (JAX + Flax NNX + Optax).
+jax = [
+    "jax>=0.4.28",
+    "flax>=0.8.4",
+    "optax>=0.2.2",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "black>=24.4",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/matryoshka_search"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "NPY"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
