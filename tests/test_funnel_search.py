@@ -1,5 +1,4 @@
 import numpy as np
-
 from matryoshka_search.eval.funnel_search import brute_force_search, funnel_search
 
 

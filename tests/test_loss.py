@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 import pytest
-
 from matryoshka_search.train.loss import info_nce_loss, matryoshka_loss
 
 

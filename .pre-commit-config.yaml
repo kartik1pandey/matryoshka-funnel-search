@@ -19,3 +19,15 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=5000]
       - id: check-merge-conflict
+
+  # Runs the project's own installed mypy (via `make setup`) rather than a
+  # pinned mirror, so it always type-checks against the same interpreter and
+  # installed stubs (torch/jax/etc.) that CI and local dev actually use.
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy src
+        language: system
+        pass_filenames: false
+        types: [python]

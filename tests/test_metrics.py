@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 from matryoshka_search.eval.metrics import ndcg_at_k, recall_at_k, retention
 
 

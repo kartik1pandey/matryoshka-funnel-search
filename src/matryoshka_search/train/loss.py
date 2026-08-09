@@ -82,4 +82,7 @@ def matryoshka_loss(
         if d <= 0 or d > full_dim:
             raise ValueError(f"invalid Matryoshka dimension {d} for embeddings of size {full_dim}")
 
-    return sum(info_nce_loss(image_emb[..., :d], text_emb[..., :d], temperature) for d in dims)
+    per_dim_losses = jnp.stack(
+        [info_nce_loss(image_emb[..., :d], text_emb[..., :d], temperature) for d in dims]
+    )
+    return jnp.sum(per_dim_losses)
