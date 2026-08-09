@@ -33,6 +33,12 @@ jax = [
     "jax>=0.4.28",
     "flax>=0.8.4",
     "optax>=0.2.2",
+    # Recent orbax-checkpoint releases (a flax dependency) bundle deeply
+    # nested test-fixture paths that exceed Windows' MAX_PATH during pip
+    # install, even with Windows Long Paths enabled in some configurations.
+    # Pinned to the last version confirmed to install and work cleanly on
+    # Windows for this project's actual (non-checkpointing) NNX usage.
+    "orbax-checkpoint<0.7",
 ]
 dev = [
     "pytest>=8.0",
