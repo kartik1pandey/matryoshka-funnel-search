@@ -16,7 +16,14 @@ requires-python = ">=3.11"
 authors = [{ name = "Kartik Pandey" }]
 
 dependencies = [
-    "numpy>=1.26",
+    # Upper-bounded: numpy releases starting around 2.5 ship a bundled .pyi
+    # stub using PEP 695 `type X = ...` syntax, which mypy only accepts when
+    # `[tool.mypy] python_version >= "3.12"` — since this project's mypy
+    # target intentionally tracks the *minimum* supported Python (3.11, see
+    # requires-python above) to catch accidental use of newer-only syntax in
+    # our own code, an unpinned numpy silently breaks mypy the next time pip
+    # resolves a fresh install (this happened once already — see git log).
+    "numpy>=1.26,<2.5",
     "pillow>=10.0",
     "pandas>=2.1",
     "tqdm>=4.66",
