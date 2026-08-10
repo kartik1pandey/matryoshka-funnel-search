@@ -115,22 +115,31 @@ dimensions, nDCG@10, funnel-search-specific retention, honest discussion of
 where the gap to the literature widens at aggressive truncation, and why).
 
 **Funnel search vs. brute force** (Stage 1 low-dim + Stage 2 full-dim
-rerank, real latency on the 15,000-item catalog): **~4.2x faster** (20.1ms →
-4.8ms per query) for a 1.5-point Recall@10 cost at `low_dim=64`. At a more
+rerank; latency measured directly on the real 15,000-item catalog by
+`scripts/cost_projection.py` — see chart below): **~5.2x faster** (26.0ms →
+5.0ms per query) at `low_dim=64`, for a 1.5-point Recall@10 cost (98.5%
+funnel retention vs. brute force, a separate quality-only measurement from
+`scripts/evaluate.py`, unaffected by wall-clock timing). At a more
 aggressive `low_dim=16`, the MRL model still recovers 93.6% of brute-force
 recall — the baseline collapses to 62% — which is the specific scenario this
-whole project exists to demonstrate.
+whole project exists to demonstrate. (`scripts/evaluate.py` runs its own,
+separate latency benchmark too, for a different question — is latency the
+same regardless of which model produced the embeddings — see
+[docs/08_results.md](./docs/08_results.md); its absolute numbers differ
+slightly from the ones here, which is expected wall-clock noise between two
+independent benchmark runs, not a discrepancy — this README only ever
+quotes the `cost_projection.py` numbers, matching the chart.)
 
 <div align="center">
 <img src="./assets/latency_comparison.png" alt="Grouped bar chart of mean query latency: at 15,000 items (measured), funnel search is 5.0ms vs. 26.0ms brute force; at 147,702 items (extrapolated), funnel search is 48.5ms vs. 256.5ms brute force" width="85%" />
 </div>
 
-**Cost projection to the full 147,702 item ABO catalog** (extrapolated from
-the 15,000 item measurements, not separately measured — see
+**Cost projection to the full 147,702-item ABO catalog** (extrapolated from
+the same 15,000-item measurement above, not separately measured — see
 [docs/08_results.md](./docs/08_results.md) for the full breakdown and
 stated scaling assumptions): brute-force full-dim search extrapolates to
-~257ms/query vs. ~49ms for funnel search (~5.2x). A plain full-dim
-brute-force search would cross a 100ms interactive-latency budget at
+~256.5ms/query vs. ~48.5ms for funnel search (~5.3x at that scale). A plain
+full-dim brute-force search would cross a 100ms interactive-latency budget at
 ~57,600 items — below this catalog's size — but Stage 1 as actually built
 here (low-dim, not full-dim) has its own much higher viability threshold,
 ~304,700 items, comfortably past 147,702. Storage: one 512-dim float32

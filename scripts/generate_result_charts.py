@@ -123,11 +123,25 @@ def plot_recall_by_dimension(report: dict) -> None:
     plt.close(fig)
 
 
-def plot_latency_comparison(report: dict) -> None:
+def plot_latency_comparison(report: dict) -> dict:
+    """Returns the plotted numbers (ms) so `main()` can print a copy-pasteable
+    summary — the exact prevention for the bug this replaced: this script and
+    scripts/evaluate.py both independently wall-clock-benchmark "brute-force
+    full-dim vs. funnel search," and two independent benchmark runs on a
+    shared dev machine do NOT agree to the millisecond (20.1ms vs. 26.0ms was
+    observed for the *same* operation across two runs — ordinary noise, not a
+    bug in either measurement). `cost_projection_report.json` (this report)
+    is the sole source for any latency number quoted publicly (README,
+    docs/08_results.md's Cost Projection section) — scripts/evaluate.py's own
+    latency numbers exist only to compare Matryoshka-vs-baseline latency
+    (docs/08_results.md's Week 3 Latency section), never to be re-quoted here
+    or in the README as if they were the same measurement.
+    """
     measured = report["measured_latency_seconds"]
     extrapolated = report["extrapolated_latency_seconds_at_full_catalog"]
     n_measured = report["n_measured"]
     n_full = report["full_catalog_size"]
+    low_dim = report["funnel_low_dim"]
 
     funnel_ms = [
         (measured["funnel_stage1"] + measured["funnel_stage2"]) * 1000,
@@ -138,6 +152,7 @@ def plot_latency_comparison(report: dict) -> None:
         extrapolated["brute_force_full_dim"] * 1000,
     ]
     group_labels = [f"{n_measured:,} items\n(measured)", f"{n_full:,} items\n(extrapolated)"]
+    funnel_label = f"Funnel search (Stage 1 @ {low_dim}-dim)"
 
     fig, ax = plt.subplots(figsize=(8, 5), dpi=150)
     _style_axes(ax)
@@ -145,7 +160,7 @@ def plot_latency_comparison(report: dict) -> None:
     x = [0, 1]
     width = 0.32
     bars_funnel = ax.bar(
-        [xi - width / 2 for xi in x], funnel_ms, width, color=BLUE, label="Funnel search", zorder=3
+        [xi - width / 2 for xi in x], funnel_ms, width, color=BLUE, label=funnel_label, zorder=3
     )
     bars_brute = ax.bar(
         [xi + width / 2 for xi in x],
@@ -186,8 +201,8 @@ def plot_latency_comparison(report: dict) -> None:
         fontweight="bold",
     )
     ax.set_title(
-        "Measured on the real 15,000-item catalog; extrapolated to the full "
-        "147,702-item ABO catalog",
+        "Measured on the real 15,000-item catalog (Matryoshka embeddings)\n"
+        "Extrapolated to the full 147,702-item ABO catalog",
         loc="left",
         fontsize=10,
         color=INK_SECONDARY,
@@ -199,6 +214,16 @@ def plot_latency_comparison(report: dict) -> None:
     fig.savefig(ASSETS_DIR / "latency_comparison.png")
     plt.close(fig)
 
+    return {
+        "low_dim": low_dim,
+        "measured_funnel_ms": funnel_ms[0],
+        "measured_brute_force_ms": brute_force_ms[0],
+        "extrapolated_funnel_ms": funnel_ms[1],
+        "extrapolated_brute_force_ms": brute_force_ms[1],
+        "n_measured": n_measured,
+        "n_full": n_full,
+    }
+
 
 def main() -> None:
     evaluation_report = json.loads(
@@ -209,9 +234,26 @@ def main() -> None:
     )
 
     plot_recall_by_dimension(evaluation_report)
-    plot_latency_comparison(cost_projection_report)
+    latency = plot_latency_comparison(cost_projection_report)
     print(f"Wrote {ASSETS_DIR / 'recall_by_dimension.png'}")
     print(f"Wrote {ASSETS_DIR / 'latency_comparison.png'}")
+
+    speedup_measured = latency["measured_brute_force_ms"] / latency["measured_funnel_ms"]
+    speedup_extrapolated = (
+        latency["extrapolated_brute_force_ms"] / latency["extrapolated_funnel_ms"]
+    )
+    print(
+        "\nCopy these into README.md / docs/08_results.md prose verbatim — do not "
+        "hand-type or re-derive latency numbers from a different script's report; "
+        "that's what caused prose and chart to disagree last time:\n"
+        f"  Measured ({latency['n_measured']:,} items): "
+        f"{latency['measured_brute_force_ms']:.1f}ms -> "
+        f"{latency['measured_funnel_ms']:.1f}ms (~{speedup_measured:.1f}x), "
+        f"Stage 1 @ {latency['low_dim']}-dim\n"
+        f"  Extrapolated ({latency['n_full']:,} items): "
+        f"{latency['extrapolated_brute_force_ms']:.1f}ms -> "
+        f"{latency['extrapolated_funnel_ms']:.1f}ms (~{speedup_extrapolated:.1f}x)"
+    )
 
 
 if __name__ == "__main__":
