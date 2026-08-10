@@ -70,6 +70,12 @@ dev = [
 viz = [
     "matplotlib>=3.8",
 ]
+# Browser UI for the demo (src/matryoshka_search/demo/web.py / app.py) — kept
+# out of `dev`/CI since the CLI demo (demo/cli.py) is the tested, required
+# path; this is an optional, additional way to run the same pipeline.
+web = [
+    "gradio>=4.0",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/matryoshka_search"]
@@ -97,6 +103,16 @@ python_version = "3.11"
 ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
+
+# Gradio ships its own (partial) type hints, so `ignore_missing_imports`
+# above doesn't apply — mypy analyzes the stubs it finds and doesn't resolve
+# event-handler methods like `.click()`/`.submit()` on component instances
+# (a gradio/mypy ecosystem gap, not a real type error in our usage; verified
+# these methods exist and work at runtime). Scoped to just the one module
+# that touches gradio's component API.
+[[tool.mypy.overrides]]
+module = "matryoshka_search.demo.web"
+disable_error_code = ["attr-defined"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
