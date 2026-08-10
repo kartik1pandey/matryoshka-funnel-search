@@ -64,6 +64,12 @@ dev = [
     "mypy>=1.10",
     "pre-commit>=3.7",
 ]
+# Only needed to regenerate the README's result charts
+# (scripts/generate_result_charts.py) — kept out of `dev`/CI since it's not
+# part of the actual training/eval/demo pipeline.
+viz = [
+    "matplotlib>=3.8",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/matryoshka_search"]

@@ -96,6 +96,10 @@ Measured on 1,500 held-out validation queries against the real cached
 embeddings for all 15,000 sampled ABO products (Recall@10, retention vs. the
 512-dim reference point):
 
+<div align="center">
+<img src="./assets/recall_by_dimension.png" alt="Line chart of Recall@10 vs. Matryoshka dimension for the Matryoshka model and the baseline, both rising from Recall@10=0.139/0.041 at dim=8 to 0.681/0.677 at dim=512, with the Matryoshka model above the baseline at every dimension" width="85%" />
+</div>
+
 | Dimension | Recall@10 (MRL) | Recall@10 (baseline) | Retention (MRL) | Retention (baseline) |
 |---|---|---|---|---|
 | 512 | 0.681 | 0.677 | 100% | 100% |
@@ -117,8 +121,12 @@ aggressive `low_dim=16`, the MRL model still recovers 93.6% of brute-force
 recall — the baseline collapses to 62% — which is the specific scenario this
 whole project exists to demonstrate.
 
-**Cost projection to the full 147,702-item ABO catalog** (extrapolated from
-the 15,000-item measurements, not separately measured — see
+<div align="center">
+<img src="./assets/latency_comparison.png" alt="Grouped bar chart of mean query latency: at 15,000 items (measured), funnel search is 5.0ms vs. 26.0ms brute force; at 147,702 items (extrapolated), funnel search is 48.5ms vs. 256.5ms brute force" width="85%" />
+</div>
+
+**Cost projection to the full 147,702 item ABO catalog** (extrapolated from
+the 15,000 item measurements, not separately measured — see
 [docs/08_results.md](./docs/08_results.md) for the full breakdown and
 stated scaling assumptions): brute-force full-dim search extrapolates to
 ~257ms/query vs. ~49ms for funnel search (~5.2x). A plain full-dim
