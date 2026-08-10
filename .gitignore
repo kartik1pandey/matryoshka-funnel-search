@@ -34,6 +34,10 @@ artifacts/
 mlruns/
 wandb/
 
+# --- Hugging Face Space deploy staging (scripts/prepare_space_subset.py,
+# scripts/deploy_space.py) — a build artifact, not source ---
+space_build/
+
 # --- Env / secrets ---
 .env
 .env.*

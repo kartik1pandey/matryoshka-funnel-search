@@ -12,7 +12,7 @@
 [![JAX](https://img.shields.io/badge/JAX-trainable%20head-4285F4)](https://jax.readthedocs.io/)
 [![Paper](https://img.shields.io/badge/arXiv-2205.13147-b31b1b)](https://arxiv.org/abs/2205.13147)
 
-**[Overview](#-overview) · [Method](#-method) · [Tech Stack](#-tech-stack) · [Quickstart](#-quickstart) · [Status](#%EF%B8%8F-status) · [Results](#-results) · [Citation](#-citation)**
+**[Overview](#-overview) · [Demo](#-demo) · [Method](#-method) · [Tech Stack](#-tech-stack) · [Quickstart](#-quickstart) · [Status](#%EF%B8%8F-status) · [Results](#-results) · [Citation](#-citation)**
 
 </div>
 
@@ -34,6 +34,19 @@ text-to-image product search system over the
 dataset, benchmarked honestly against retention numbers reported in the
 literature. It is a faithful reproduction of an established,
 production-adopted technique, not a novelty claim.
+
+## 🎬 Demo
+
+<div align="center">
+<img src="./assets/demo.gif" alt="Screen recording of the Gradio web demo: typing 'wireless bluetooth headphones', 'leather office chair', and 'yoga mat' into the search box and getting a gallery of real, on-topic Amazon product images back, with per-stage timing shown below" width="90%" />
+</div>
+
+Real queries against the real trained model — no mockups. Run it yourself:
+
+```bash
+make setup && make demo-web    # browser UI at http://localhost:7860
+make demo                      # or the terminal version
+```
 
 ## 🧠 Method
 

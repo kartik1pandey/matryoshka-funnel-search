@@ -73,8 +73,11 @@ viz = [
 # Browser UI for the demo (src/matryoshka_search/demo/web.py / app.py) — kept
 # out of `dev`/CI since the CLI demo (demo/cli.py) is the tested, required
 # path; this is an optional, additional way to run the same pipeline.
+# huggingface_hub is only used by scripts/deploy_space.py (publishing the
+# same web app to a Hugging Face Space), not by the app itself.
 web = [
     "gradio>=4.0",
+    "huggingface_hub>=0.20",
 ]
 
 [tool.hatch.build.targets.wheel]
