@@ -32,4 +32,4 @@ docker-build:
 	docker build -t matryoshka-search:latest .
 
 docker-run:
-	docker run --rm -it -v $(PWD)/data:/app/data matryoshka-search:latest
+	docker run --rm -it -v $(PWD)/data:/app/data -v $(PWD)/checkpoints:/app/checkpoints matryoshka-search:latest

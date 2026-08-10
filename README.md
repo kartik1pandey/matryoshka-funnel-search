@@ -86,7 +86,7 @@ CPU is fine for development and the demo path.
 
 ```
 src/matryoshka_search/
-├── data/     # ABO subset download + preprocessing
+├── data/     # ABO subset download + deterministic selection
 ├── model/    # frozen PyTorch backbone + trainable JAX Matryoshka head
 ├── train/    # Matryoshka nested loss + Optax training loop
 ├── eval/     # retention metrics, funnel search, latency benchmarks
