@@ -41,7 +41,14 @@ torch = [
 ]
 # Trainable Matryoshka head (JAX + Flax NNX + Optax).
 jax = [
-    "jax>=0.4.28",
+    # Upper-bounded for the same reason as numpy above: jax 0.11.1 switched
+    # jax/numpy/__init__.pyi's `PadValueLike` alias to PEP 695 `type X[T] = ...`
+    # syntax, which mypy rejects under this project's python_version = "3.11"
+    # target ("Type parameter lists are only supported in Python 3.12 and
+    # greater") — broke CI on a fresh install (jax>=0.4.28 was previously
+    # unpinned) without any code change on our side. 0.11.0 is the last
+    # version confirmed clean.
+    "jax>=0.4.28,<0.11.1",
     # >=0.11 for nnx.Optimizer.update(model, grads) — confirmed via
     # inspect.signature() that 0.10.7 only accepts update(grads). Also the
     # version where flax itself starts requiring Python >=3.11 (see

@@ -15,3 +15,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cost projection to the full 147,702-item ABO catalog, with an honest analytical-extrapolation methodology (`scripts/cost_projection.py`).
 - Interactive terminal demo (`demo/cli.py`) and a Gradio browser demo (`demo/web.py`, `app.py`).
 - Real-data result charts embedded in the README (`scripts/generate_result_charts.py`).
+
+### Fixed
+- Pinned `jax<0.11.1` — 0.11.1 shipped a PEP 695 type-alias syntax change in `jax/numpy/__init__.pyi` that broke mypy under this project's Python 3.11 target on a fresh CI install, same class of issue as the existing `numpy`/`orbax-checkpoint` pins.
