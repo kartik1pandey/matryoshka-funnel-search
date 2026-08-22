@@ -115,17 +115,31 @@ embeddings for all 15,000 sampled ABO products (Recall@10, retention vs. the
 
 | Dimension | Recall@10 (MRL) | Recall@10 (baseline) | Retention (MRL) | Retention (baseline) |
 |---|---|---|---|---|
-| 512 | 0.681 | 0.677 | 100% | 100% |
+| 512 | 0.681 | 0.677 | 100% (reference) | 100% (reference) |
 | 256 | 0.662 | 0.650 | 97.2% | 96.0% |
+| 128 | 0.644 | 0.611 | 94.5% | 90.2% |
 | 64  | 0.600 | 0.509 | 88.1% | 75.1% |
+| 32  | 0.501 | 0.356 | 73.6% | 52.6% |
 | 16  | 0.355 | 0.145 | 52.2% | 21.4% |
 | 8   | 0.139 | 0.041 | 20.4% | 6.1% |
 
+nDCG@10 (same setup):
+
+| Dimension | nDCG@10 (MRL) | nDCG@10 (baseline) |
+|---|---|---|
+| 512 | 0.438 | 0.437 |
+| 256 | 0.424 | 0.416 |
+| 128 | 0.405 | 0.380 |
+| 64  | 0.379 | 0.314 |
+| 32  | 0.293 | 0.198 |
+| 16  | 0.186 | 0.078 |
+| 8   | 0.068 | 0.021 |
+
 **256-dim retention (97.2%) lands inside the 94–98% range reported by
 independent academic benchmarking of production embedding models** — see
-[docs/08_results.md](./docs/08_results.md) for the full table (all 7
-dimensions, nDCG@10, funnel-search-specific retention, honest discussion of
-where the gap to the literature widens at aggressive truncation, and why).
+[docs/08_results.md](./docs/08_results.md) for funnel-search-specific
+retention and an honest discussion of where the gap to the literature
+widens at aggressive truncation, and why.
 
 **Funnel search vs. brute force** (Stage 1 low-dim + Stage 2 full-dim
 rerank; latency measured directly on the real 15,000-item catalog by
